@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded", () => {
 // Initialisation de l’état login/logout
 document.addEventListener("DOMContentLoaded", () => {
     const token = localStorage.getItem("token");
-    const modeEditBar = document.querySelector(".bar_edit");
-    const btnModifier = document.querySelector(".btn_modifier");
+    const modeEditBar = document.querySelector(".bar-edit");
+    const btnModifier = document.querySelector(".btn-modifier");
     const loginLogoutLink = document.getElementById("login-logout");
     const filters = document.querySelector(".container-filter");
 
@@ -128,10 +128,10 @@ function logout() {
 
 //------------------------------------------------------------------
 // Modale
-const modal = document.getElementById('modal_gallery');
+const modal = document.getElementById('modal-gallery');
 const closeBtn = modal?.querySelector('.close');
 const modalImagesContainer = modal?.querySelector('.modal-images');
-const btnModifier = document.querySelector('.btn_modifier');
+const btnModifier = document.querySelector('.btn-modifier');
 
 // Récupération des oeuvres
 async function fetchWorks() {
@@ -150,7 +150,10 @@ function displayWorksInModal(works) {
     modalImagesContainer.innerHTML = "";
     works.forEach(({ imageUrl, title }) => {
         const figure = document.createElement("figure");
-        figure.innerHTML = `<img src="${imageUrl}" alt="${title}">`;
+        figure.innerHTML = `
+        <img src="${imageUrl}" alt="${title}">
+        <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+        `;
         modalImagesContainer.appendChild(figure);
     });
 }

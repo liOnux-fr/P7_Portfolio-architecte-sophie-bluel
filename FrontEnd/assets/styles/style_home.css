@@ -138,7 +138,7 @@ nav a.active {
 
 /*********** Bannière ModeEdition ***********/
 
-.bar_edit {
+.bar-edit {
 	background-color: black;
 	color: white;
 	justify-content: center;
@@ -183,17 +183,17 @@ nav a.active {
 }
 
 /* ÉDITION - bouton modifier */
-.edit_projets {
+.edit-projets {
     position: relative;
     text-align: center;
 }
 
-.edit_projets h2 {
+.edit-projets h2 {
     display: inline-block;
     margin: 0;
 }
 
-.btn_modifier {
+.btn-modifier {
     position: absolute;
     left: 61%;
     top: 30%;
@@ -207,7 +207,7 @@ nav a.active {
     gap: 5px;
 }
 
-.btn_modifier i {
+.btn-modifier i {
     margin-right: 5px;
 }
 
@@ -226,37 +226,93 @@ nav a.active {
 }
 
 .modal-content {
+	position: relative;
     background-color: white;
     margin: 5% auto;
-    padding: 20px;
-    width: 90%;
-    max-width: 800px;
+    padding: 50px 100px 10px 100px;
+    width: 50%;
+    max-width: 630px;
     border-radius: 10px;
 }
 
 .modal-content h3 {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
+	font-size: 26px;
 }
 
 .modal-images {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     grid-template-rows: repeat(3, auto);
-	gap: 10px;
+	padding-bottom: 80px;
+	gap: 20px 0px;
+	border-bottom: 1px solid #B3B3B3;
+}
+
+.modal-images figure {
+	display: inline-block;
+	width: fit-content;
+	position: relative;
+	margin: 0;
 }
 
 .modal-images img {
-    width: 100%;
+	display: block;
+    width: 80%;
     height: auto;
-    border-radius: 5px;
-    object-fit: cover;
+	margin: 0 auto;
+}
+
+.btn-delete {
+	position: absolute;
+  	top: 5px;
+  	right: 17px;
+  	width: 24px;
+  	height: 24px;
+  	background-color: black;
+  	border: none;
+  	border-radius: 4px;
+  	display: flex;
+  	align-items: center;
+  	justify-content: center;
+  	cursor: pointer;
+}
+
+.btn-delete i {
+  font-size: 14px;
+  color: white;
+}
+
+.wrapperAjoutPhoto {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: auto;
+	height: 120px;
+}
+
+.btn-ajoutPhoto {
+	background-color: var(--color-main);
+	border-radius: 60px;
+	border: none;
+	font-family: 'Syne';
+	font-size: 14px;
+	font-weight: 700;
+	color: white;
+	padding: 1px 40px;
+    height: 37px;
+	cursor: pointer;
+}
+
+.btn-AjoutPhoto:hover {
+	background-color: var(--color-submit-hover);
 }
 
 .close {
     position: absolute;
-    right: 320px;
-    top: 80px;
+    right: 40px;
+    top: 20px;
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
