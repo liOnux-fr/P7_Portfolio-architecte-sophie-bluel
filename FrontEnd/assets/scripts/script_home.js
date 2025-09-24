@@ -32,8 +32,9 @@ function displayWorks(works) {
   const gallery = document.querySelector(".gallery");
   gallery.innerHTML = "";
 
-  works.forEach(({ imageUrl, title }) => {
+  works.forEach(({ id, imageUrl, title }) => {
     const figure = document.createElement("figure");
+    figure.dataset.id = id; //stock l'id de l'oeuvre dans l'élément pour la suppression
     figure.innerHTML = `<img src="${imageUrl}" alt="${title}"><figcaption>${title}</figcaption>`;
     gallery.appendChild(figure);
   });
@@ -70,7 +71,7 @@ function displayCategories(categories, works) {
 }
 
 //----------------------------------------------------------------------
-// Lancer l'initialisation
+// Lancer la galerie
 initGallery();
 
 
@@ -119,20 +120,58 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-//------------------------------------------------------------------
 // Logout
 function logout() {
     localStorage.removeItem("token");
     window.location.href = "home.html";
 }
 
-//------------------------------------------------------------------
-// Modale
-const modal = document.getElementById('modal-gallery');
-const closeBtn = modal?.querySelector('.close');
-const modalImagesContainer = modal?.querySelector('.modal-images');
-const btnModifier = document.querySelector('.btn-modifier');
+// ----------------------------------------------------------------------
+// Création dynamique de la modale
+const modal = document.createElement("aside");
+modal.id = "modal-gallery";
+modal.classList.add("modal");
+modal.setAttribute("aria-hidden", "true");
+modal.setAttribute("role", "dialog");
 
+// Contenu de la modale
+const modalContent = document.createElement("div");
+modalContent.classList.add("modal-content");
+
+// Bouton fermer
+const closeBtn = document.createElement("span");
+closeBtn.classList.add("close");
+closeBtn.innerHTML = "&times;";
+closeBtn.addEventListener("click", closeModal);
+
+// Titre
+const modalTitle = document.createElement("h3");
+modalTitle.textContent = "Galerie photo";
+
+// Container des images
+const modalImagesContainer = document.createElement("div");
+modalImagesContainer.classList.add("modal-images");
+
+// Wrapper pour le bouton ajouter
+const wrapperAjoutPhoto = document.createElement("div");
+wrapperAjoutPhoto.classList.add("wrapperAjoutPhoto");
+
+// Bouton ajouter
+const btnAjoutPhoto = document.createElement("button");
+btnAjoutPhoto.classList.add("btn-ajoutPhoto");
+btnAjoutPhoto.textContent = "Ajouter une photo";
+btnAjoutPhoto.addEventListener("click", () => {
+    alert("Formulaire d’ajout de photo à afficher ici !");
+});
+wrapperAjoutPhoto.appendChild(btnAjoutPhoto);
+wrapperAjoutPhoto.style.display = "none";
+
+// Assemblage de la modale
+modalContent.append(closeBtn, modalTitle, modalImagesContainer, wrapperAjoutPhoto);
+modal.appendChild(modalContent);
+document.body.appendChild(modal);
+
+// ----------------------------------------------------------------------
 // Récupération des oeuvres
 async function fetchWorks() {
     try {
@@ -145,28 +184,71 @@ async function fetchWorks() {
     }
 }
 
-// Affichage des oeuvres dans la modale
+// ----------------------------------------------------------------------
+// Affichage des oeuvres dans la modale avec la corbeille
 function displayWorksInModal(works) {
     modalImagesContainer.innerHTML = "";
-    works.forEach(({ imageUrl, title }) => {
+    works.forEach(({ id, imageUrl, title }) => {
         const figure = document.createElement("figure");
+        figure.dataset.id = id;
         figure.innerHTML = `
-        <img src="${imageUrl}" alt="${title}">
-        <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
+            <img src="${imageUrl}" alt="${title}">
+            <button class="btn-delete"><i class="fa-solid fa-trash-can"></i></button>
         `;
         modalImagesContainer.appendChild(figure);
+
+        // Bouton supprimer avec confirmation
+        figure.querySelector(".btn-delete").addEventListener("click", () => {
+            const confirmDelete = confirm("Voulez-vous vraiment supprimer cette œuvre ?");
+            if (confirmDelete) {
+                deleteWork(id, figure);
+            }
+        });
     });
 }
 
-// Bouton "modifier"
-btnModifier?.addEventListener('click', async () => {
+// ----------------------------------------------------------------------
+// Bouton modifier
+const btnModifier = document.querySelector(".btn-modifier");
+btnModifier?.addEventListener("click", async () => {
     const works = await fetchWorks();
     displayWorksInModal(works);
-    modal.style.display = 'block';
+    modal.style.display = "block";
+    wrapperAjoutPhoto.style.display = "flex";
 });
 
-// Ferme la modale
-closeBtn?.addEventListener('click', () => modal.style.display = 'none');
-window.addEventListener('click', (e) => {
-    if (e.target === modal) modal.style.display = 'none';
+// ----------------------------------------------------------------------
+// Fermer la modale
+function closeModal() {
+    modal.style.display = "none";
+    wrapperAjoutPhoto.style.display = "none";
+}
+window.addEventListener("click", (e) => {
+    if (e.target === modal) closeModal();
 });
+
+// ----------------------------------------------------------------------
+// Supprimer une oeuvre
+async function deleteWork(id, figure) {
+    const token = localStorage.getItem("token");
+    try {
+        const res = await fetch(`http://127.0.0.1:5678/api/works/${id}`, {
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` },
+        });
+
+        if (res.ok) {
+            // Supprimer dans la modale
+            figure.remove();
+
+            // Supprimer dans la galerie principale
+            const galleryFigure = document.querySelector(`.gallery figure[data-id="${id}"]`);
+            galleryFigure?.remove();
+            console.log(`Oeuvre ${id} supprimée`);
+        } else {
+            console.error(`Échec de suppression (status ${res.status})`);
+        }
+    } catch (err) {
+        console.error("Erreur lors de la suppression :", err);
+    }
+}
