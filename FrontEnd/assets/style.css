@@ -366,6 +366,13 @@ form button {
     height: 59px;
     color: white;
     background-color: black;
-    display: flex;
-    
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+a{
+    text-decoration: none;
+    color: unset;
 }

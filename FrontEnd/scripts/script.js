@@ -60,18 +60,21 @@ export function login() {
             }
             //redirige sur la page principale
             window.location.href = "http://127.0.0.1:5500/index.html";
+            //passe en mode edition
+            window.localStorage.setItem("edition", "1");
         }
     });
 }
 
 //fonction pour savoir si l'utilidsateur est deja connécté
-function userConnected() {
+export function userConnected() {
     return window.localStorage.getItem("userId") || window.localStorage.getItem("token");
 }
 
 export async function filters() {
     const divFilters = document.querySelector(".filters");
     const category = await fetch(GETcategory).then((category) => category.json());
+    divFilters.innerHTML += `<button id="0" class="active">Tous</button>`;
     category.forEach((c) => {
         let btn = `<button id="${c.id}">${c.name}</button>`;
         divFilters.innerHTML += btn;
@@ -98,3 +101,20 @@ export async function filters() {
         });
     });
 }
+
+
+export function editionMode(){
+
+    const bandeau = document.querySelector(".editonMode");
+    bandeau.style.display = "flex";
+
+    const log = document.querySelector(".log");
+    log.innerHTML = '<a href="">log out</a>';
+    log.addEventListener("click", (e) => {
+        window.localStorage.removeItem("userId");
+        window.localStorage.removeItem("token");
+    });
+
+    
+}
+
