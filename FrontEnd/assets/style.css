@@ -264,12 +264,12 @@ footer nav ul {
 }
 
 .filters {
-	display: flex;
+    display: flex;
     flex-direction: row;
     justify-content: center;
     gap: 10px;
-	width: 585px;
-	margin: auto;
+    width: 585px;
+    margin: auto;
     margin-top: 50px;
     margin-bottom: 50px;
 }
@@ -279,13 +279,75 @@ footer nav ul {
     font-size: 1.2em;
     color: #1d6154;
     height: 38px;
-	border: #1d6154 1px solid;
-	border-radius: 60px;
-	background-color: #fffef8;
-	padding: 10px 15px;
+    border: #1d6154 1px solid;
+    border-radius: 60px;
+    background-color: #fffef8;
+    padding: 10px 15px;
 }
 
 .filters button:focus {
     color: #fffef8;
-	background-color: #1d6154;
+    background-color: #1d6154;
+}
+
+/**********************Login*******************/
+
+.login {
+    width: 379px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.login h2 {
+    text-align: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 39px;
+}
+form fieldset label {
+    font-family: "Work Sans";
+    font-weight: 500;
+    font-size: 1em;
+}
+
+form fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form fieldset input {
+    height: 51px;
+    box-sizing: border-box;
+    width: 100%;
+    border: none;
+    box-shadow: 0px 4px 14px #00000017;
+    background-color: white;
+}
+
+form button {
+    font-weight: 700;
+    font-size: 1.2em;
+    color: #fffef8;
+    height: 38px;
+    border: #1d6154 1px solid;
+    border-radius: 60px;
+    background-color: #1d6154;
+    padding: 10px 15px;
+    width: 179px;
+    margin: auto;
+}
+
+.login > button {
+    font-weight: 700;
+    font-size: 1em;
+    border: none;
+    background-color: #fffef8;
+    text-decoration: underline;
+    color: #3d3d3d;
 }
