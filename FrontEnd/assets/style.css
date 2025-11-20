@@ -285,11 +285,10 @@ footer nav ul {
     padding: 10px 15px;
 }
 
-.filters button:focus {
+button.active {
     color: #fffef8;
     background-color: #1d6154;
 }
-
 /**********************Login*******************/
 
 .login {
