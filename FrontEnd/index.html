@@ -14,8 +14,9 @@
         <script type="module" src="/scripts/main.js"></script>
     </head>
     <body>
-		<div class="editonMode"><img src="assets/icons/modificateur.png" alt="">
-			Mode edition</div>
+        <div class="editonMode">
+            <img src="assets/icons/modificateur.png" alt="" /> Mode edition
+        </div>
         <header>
             <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
             <nav>
@@ -51,9 +52,15 @@
                 </article>
             </section>
             <section id="portfolio">
-                <h2>Mes Projets</h2>
-                <div class="filters">
-                </div>
+                <h2>
+                    Mes Projets
+                    <span class="edition">
+                        <img src="assets/icons/Group.png" alt="" />
+                        modifier
+                    </span>
+                </h2>
+
+                <div class="filters"></div>
                 <div class="gallery"></div>
             </section>
             <section id="contact">
@@ -70,6 +77,58 @@
                 </form>
             </section>
         </main>
+
+        <div class="modal">
+            <section class="modal-delete">
+                <img src="assets/icons/croix.svg" alt="" class="modal-close" id="modal-close" />
+                <h3>Galerie photo</h3>
+                <div class="imgGalery">
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr" id="0">
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr" >
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr">
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr" >
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr" >
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr" >
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                    <div>
+                        <img src="assets/images/abajour-tahina.png" alt="" />
+                        <button type="button" class="btn-suppr"  >
+                            <img src="assets/icons/Poubele.svg" alt="" />
+                        </button>
+                    </div>
+                </div>
+                <button type="button" id="btn-add-works">Ajouter une photo</button>
+            </section>
+        </div>
 
         <footer>
             <nav>
