@@ -1,9 +1,26 @@
-import { GETworks, GETcategory, POSTlogin } from "/scripts/config.js";
+import { URLworks, GETcategory, POSTlogin } from "/scripts/config.js";
 
 export async function displayWorks() {
     //Get works by API
-    const works = await fetch(GETworks).then((works) => works.json());
+    const works = await getworks();
     dispaly(works);
+}
+
+async function getworks() {
+    return await fetch(URLworks).then((works) => works.json());
+}
+
+async function getcategory() {
+    return await fetch(GETcategory).then((category) => category.json());
+}
+
+async function delWorks(id) {
+    return await fetch(URLworks + "/" + id, {
+        method: "DELETE",
+        headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+        },
+    }).then((r) => console.log(r.ok));
 }
 
 function dispaly(array) {
@@ -19,8 +36,9 @@ function dispaly(array) {
 }
 
 export function login() {
-    //recupere le formulair
-    const form = document.querySelector("form");
+    //recupere le formulaire
+    if (window.location.href !== "http://127.0.0.1:5500/login.html") return 0;
+    const form = document.querySelector(".login form");
     form.addEventListener("submit", async (event) => {
         //desactive le recharhement de la page
         event.preventDefault();
@@ -58,8 +76,6 @@ export function login() {
             }
             //redirige sur la page principale
             window.location.href = "http://127.0.0.1:5500/index.html";
-            //passe en mode edition
-            window.localStorage.setItem("edition", "1");
         }
     });
 }
@@ -91,7 +107,7 @@ export async function filters() {
             const id = e.target.id;
             console.log(id);
 
-            const works = await fetch(GETworks).then((works) => works.json());
+            const works = await fetch(URLworks).then((works) => works.json());
             if (id != 0) {
                 const filteredBtn = works.filter((element) => element.categoryId == id);
                 dispaly(filteredBtn);
@@ -103,7 +119,7 @@ export async function filters() {
 export function editionMode() {
     //affiche le bandeau
     const bandeau = document.querySelector(".editonMode");
-    bandeau.style.display = "flex";
+    bandeau.style.setProperty("display", "flex");
 
     //Change le login en logout et ajoute la fonctionnalité de deconnection
     const log = document.querySelector(".log");
@@ -121,47 +137,106 @@ export function editionMode() {
     // })
 }
 
-export function dispalyModal() {
-    const btn = document.querySelector("span.edition");
-    const modalBack = document.querySelector(".modal-backgroud");
-    const modalClose = document.getElementById("modal-close");
-    const Back = document.getElementById("modal-back");
+export function initModal() {
+    if (window.location.href !== "http://127.0.0.1:5500/index.html") return 0;
 
-    modalClose.addEventListener("click", () => {
-        modal("close")
+    //Initiaalisation des variables pour la modal
+    const open = document.querySelector("span.edition");
+    const background = document.querySelector(".modal-background");
+    const close = document.getElementById("modal-close");
+    const next = document.getElementById("modal-next");
+    const back = document.getElementById("modal-back");
 
+    //Ajoute les evenements sur les boutons et le background
+    next.addEventListener("click", () => {
+        modal("next");
     });
-    modalBack.addEventListener("click", () => {
-        modal("close")
+    close.addEventListener("click", () => {
+        modal("close");
     });
-    btn.addEventListener("click", () => {
+    background.addEventListener("click", () => {
+        modal("close");
+    });
+    open.addEventListener("click", () => {
         modal("open");
+        imgGalery();
     });
-    Back.addEventListener("click", () => {
-        modal("back");
+    back.addEventListener("click", () => {
+        modal("return");
+        imgGalery();
     });
-
 }
 
 function modal(action) {
-    const backgroud = document.querySelector(".modal-backgroud");
-    const  delete = document.querySelector(".modal-delete");
-    const modaladd = document.querySelector(".modal-add");
+    //initialisation des varibles des modals et du background
+    const background = document.querySelector(".modal-background");
+    const mdelete = document.querySelector(".modal-delete");
+    const madd = document.querySelector(".modal-add");
 
+    // determine ce que l'on veut faire en fonction de l'action passée
     switch (action) {
         case "open":
-             delete.style.setProperty("display", "flex");
-            modalBack.style.setProperty("display", "block");
+            mdelete.style.setProperty("display", "flex");
+            background.style.setProperty("display", "block");
             break;
-        case "add":
-            modaladd.style.setProperty("display", "flex");
-             delete.style.setProperty("display", "none");
+        case "next":
+            madd.style.setProperty("display", "flex");
+            mdelete.style.setProperty("display", "none");
+            break;
+        case "return":
+            madd.style.setProperty("display", "none");
+            mdelete.style.setProperty("display", "flex");
             break;
         case "close":
         default:
-             delete.style.setProperty("display", "none");
-            modalBack.style.setProperty("display", "none");
-            modaladd.style.setProperty("display", "none");
+            mdelete.style.setProperty("display", "none");
+            background.style.setProperty("display", "none");
+            madd.style.setProperty("display", "none");
             break;
     }
+}
+
+async function imgGalery() {
+    const works = await getworks();
+    displayIMGgalery(works, ".modal-galery");
+    const btnSuppr = document.querySelectorAll(".btn-suppr");
+    for (let btn of btnSuppr) {
+        btn.addEventListener("click", async () => {
+            await delWorks(btn.id);
+            imgGalery();
+        });
+    }
+}
+
+function displayIMGgalery(works, selector) {
+    let figure = "";
+    works.forEach((element) => {
+        figure += `<article>
+                    <img src="${element.imageUrl}" alt="${element.title}" class="modal-galery-img"/>
+                    <button type="button" class="btn-suppr" id="${element.id}">
+                        <img src="assets/icons/Poubele.svg" alt="Supprimer" />
+                    </button>
+                </article>`;
+    });
+    document.querySelector(selector).innerHTML = figure;
+}
+
+
+async function addWorks(){
+    const r = document.querySelector(".modal-add form");
+    const file = document.getElementById("file")
+    const title = document.getElementById("title")
+    const select = document.getElementById("category");
+
+    const category = await getcategory();
+
+
+    r.addEventListener('submit', (e) =>{
+        e.preventDefault();
+    })
+
+    file.addEventListener('change', (e)=>{
+
+    })
+
 }

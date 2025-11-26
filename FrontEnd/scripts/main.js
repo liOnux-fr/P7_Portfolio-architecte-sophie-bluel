@@ -1,14 +1,15 @@
-import { dispalyModal,displayWorks, filters, login, editionMode, userConnected } from "/scripts/script.js";
+import { initModal, displayWorks, filters, login, editionMode, userConnected } from "/scripts/script.js";
 
-displayWorks();
-if (userConnected() === null) {
-    if (window.location.href === "http://127.0.0.1:5500/index.html") {
-        filters();
-    } else if (window.location.href === "http://127.0.0.1:5500/login.html") {
+switch (window.location.href) {
+    case "http://127.0.0.1:5500/index.html":
+        displayWorks();
+        initModal();
+        if (userConnected() === null) filters();
+        else editionMode();
+        break;
+    case "http://127.0.0.1:5500/login.html":
         login();
-    }
-} else {
-    editionMode();
+        break;
+    default:
+        break;
 }
-dispalyModal();
-
