@@ -2,6 +2,7 @@ import { initModal, displayWorks, filters, login, editionMode, userConnected } f
 
 switch (window.location.href) {
     case "http://127.0.0.1:5500/index.html":
+    case "http://127.0.0.1:5500/":
         displayWorks();
         initModal();
         if (userConnected() === null) filters();

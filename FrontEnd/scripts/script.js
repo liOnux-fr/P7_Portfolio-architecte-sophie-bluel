@@ -14,6 +14,22 @@ async function getcategory() {
     return await fetch(GETcategory).then((category) => category.json());
 }
 
+async function postWorks(image, title, categoryId) {
+    const body = {
+        image: image,
+        title: title,
+        category: categoryId,
+    };
+    return await fetch(URLworks, {
+        method: "POST",
+        headers: {
+            "Content-Type": "mutipart/form-data",
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+        },
+        body: JSON.stringify(body),
+    }).then((result) => result.json());
+}
+
 async function delWorks(id) {
     return await fetch(URLworks + "/" + id, {
         method: "DELETE",
@@ -150,6 +166,7 @@ export function initModal() {
     //Ajoute les evenements sur les boutons et le background
     next.addEventListener("click", () => {
         modal("next");
+        addWorks();
     });
     close.addEventListener("click", () => {
         modal("close");
@@ -221,22 +238,67 @@ function displayIMGgalery(works, selector) {
     document.querySelector(selector).innerHTML = figure;
 }
 
+async function addWorks() {
+    const title = document.getElementById("title");
 
-async function addWorks(){
-    const r = document.querySelector(".modal-add form");
-    const file = document.getElementById("file")
-    const title = document.getElementById("title")
     const select = document.getElementById("category");
+    const categorys = await getcategory();
 
-    const category = await getcategory();
+    const form = document.querySelector(".modal-add form");
 
+    title.addEventListener("keyup", () => {
+        validForm(title, select, preimage);
+    });
 
-    r.addEventListener('submit', (e) =>{
+    categorys.forEach((c) => {
+        let option = document.createElement("option");
+        option.innerText = c.name;
+        option.value = c.name;
+        option.id = c.id;
+        select.appendChild(option);
+        console.log(option);
+    });
+
+    form.addEventListener("submit", (e) => {
         e.preventDefault();
-    })
+        const formData = new FormData();
+        formData.append("title", title.value);
+        formData.append("categoryId", select.selectedOptions[0].id);
+        formData.append("image", preimage.files[0]);
+        console.log(formData);
+        // const reader = new FileReader();
+        // let dataimg = "";
+        // reader.onload = () => {
+        //     dataimg = reader.result;
 
-    file.addEventListener('change', (e)=>{
+        //     console.log(dataimg);
 
-    })
+        postWorks(dataimg, title.value, select.selectedOptions[0].id);
+        // }
+        // reader.readAsBinaryString(preimage.files[0]);
+    });
 
+    const image = document.querySelector(".file img");
+    const preimage = document.getElementById("file");
+    preimage.addEventListener("change", (e) => {
+        if (preimage.files[0] !== undefined) {
+            image.src = URL.createObjectURL(preimage.files[0]);
+            image.onload = () => {
+                URL.revokeObjectURL(image.src);
+            };
+            const div = document.querySelector(".file div"),
+                p = document.querySelector(".file p ");
+            div.style.display = "none";
+            p.style.display = "none";
+            image.style.height = "100%";
+            image.style.width = "auto";
+        }
+    });
+}
+
+function validForm(title, select, preimage) {
+    const btn = document.getElementById("btn-save-works");
+    if (title.value !== "" && select.options.length != 0 && preimage.files.length === 1) {
+        btn.disabled = false;
+    } else btn.disabled = true;
 }
