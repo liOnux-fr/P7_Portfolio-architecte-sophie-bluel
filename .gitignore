@@ -1,3 +1,5 @@
 .idea
-Backend/
+Backend
 FrontEnd/node_modules
+Backend/database.sqlite
+
