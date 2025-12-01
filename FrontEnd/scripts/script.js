@@ -50,7 +50,7 @@ export async function displayWorks(id = 0) {
     let works = WORKS;
     //Récupere les travaux en base données
     if (id != 0) works = works.filter((element) => element.categoryId == id);
-    
+
     let figure = "";
     //Boucle sur les travaux pour les ajouter a la page d'acceuil
     works.forEach((work) => {
@@ -72,7 +72,7 @@ export async function filters() {
 
     //Récupere les catégories
     //Ajoute le filtre "Tous"
-    let categorys =[{id : 0 , name : "Tous"},...CATEGORYS];
+    let categorys = [{ id: 0, name: "Tous" }, ...CATEGORYS];
     //Pour chaque categories, ajoutes un bouton correspondant
     categorys.forEach((category) => {
         const btn = document.createElement("button");
@@ -177,28 +177,37 @@ function modal(action) {
 
 async function imgGalery() {
     //Récupere les travaux pour les afficher
-    const works = await getworks();
+    let works = WORKS;
+
+    const modalGalery = document.querySelector(".modal-galery");
+    modalGalery.innerHTML = "";
 
     //affiche les images avec un bouton pour supprimer
-    let figure = "";
     works.forEach((element) => {
-        figure += `<article>
-                    <img src="${element.imageUrl}" alt="${element.title}" class="modal-galery-img"/>
-                    <button type="button" class="btn-suppr" id="${element.id}">
-                        <img src="assets/icons/Poubele.svg" alt="Supprimer" />
-                    </button>
-                </article>`;
-    });
-    document.querySelector(".modal-galery").innerHTML = figure;
+        let article = document.createElement("article");
+        let imgWork = document.createElement("img");
+        imgWork.src = element.imageUrl;
+        imgWork.alt = element.title;
+        imgWork.classList.add("modal-galery-img");
 
-    //Ajoute un evenement au click sur les boutons et rappel img galery pour mettre a jour les images
-    const btnSuppr = document.querySelectorAll(".btn-suppr");
-    for (let btn of btnSuppr) {
+        let btn = document.createElement("button");
+        btn.id = element.id;
+        btn.classList.add("btn-suppr");
+
+        let imgDel = document.createElement("img");
+        imgDel.src = "assets/icons/Poubele.svg";
+        imgDel.alt = "Supprimer";
+
+        btn.appendChild(imgDel);
+        article.appendChild(imgWork);
+        article.appendChild(btn);
+        modalGalery.appendChild(article);
+
         btn.addEventListener("click", async () => {
-            await delWorks(btn.id);
+            delWorks(btn.id);
             imgGalery();
         });
-    }
+    });
 }
 
 async function formAddWorks() {
