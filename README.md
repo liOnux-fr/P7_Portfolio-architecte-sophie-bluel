@@ -13,6 +13,7 @@ Ce repo git contient les 2 briques logicielles du projet
 Ouvrir le dossier Backend et lire le README.md
 
 ### Frontend
+Créer une nouvelle branche
 Ouvrir le dossier Frontend et lancer liveserver de votre IDE
  
 ## Astuce
