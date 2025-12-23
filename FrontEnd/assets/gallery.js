@@ -1,6 +1,7 @@
 const filters = document.querySelector("#filter-button");
 const gallery = document.querySelector(".gallery");
 
+function majGallery(id) {
 fetch("http://localhost:5678/api/works")
 	.then(response => response.json())
 	.then(datas => {
@@ -16,6 +17,9 @@ fetch("http://localhost:5678/api/works")
 			baliseFigcaption.textContent = element.title;
 		})
 	})
+}
+
+majGallery();
 
 fetch("http://localhost:5678/api/categories")
 	.then(response => response.json())
@@ -27,6 +31,7 @@ fetch("http://localhost:5678/api/categories")
 		const tousBtn = document.querySelector("#filter-button .buttons");
 		tousBtn.addEventListener("click", function() {
 			console.log(tousBtn.dataset.id);
+			majGallery(tousBtn.dataset.id);
 		});
 		categories.forEach(element => {
             const baliseBtn = document.createElement("button");
@@ -37,6 +42,7 @@ fetch("http://localhost:5678/api/categories")
 			baliseBtn.dataset.id = element.id;
 			baliseBtn.addEventListener("click", function() {
 				console.log(baliseBtn.dataset.id);
+				majGallery(baliseBtn.dataset.id);
 			});
 		});
 	});
