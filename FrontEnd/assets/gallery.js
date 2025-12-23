@@ -19,17 +19,35 @@ fetch("http://localhost:5678/api/works")
 
 fetch("http://localhost:5678/api/categories")
 	.then(response => response.json())
-	.then(datas => {
-		filters.innerHTML = `<button type="button" class="buttons">Tous</button>`;
-		datas.forEach(element => {
+	.then(categories => {
+		if (categories.length < 2) {
+			return;
+		}
+		filters.innerHTML = `<button class="buttons" type="button" data-id="0">Tous</button>`;
+		const tousBtn = document.querySelector("#filter-button .buttons");
+		tousBtn.addEventListener("click", function() {
+			console.log(tousBtn.dataset.id);
+		});
+		categories.forEach(element => {
             const baliseBtn = document.createElement("button");
 			filters.appendChild(baliseBtn);
 			baliseBtn.classList.add("buttons");
 			baliseBtn.type = "button";
 			baliseBtn.textContent = element.name;
-		})
-		//datas = ["a"]; console.log(datas.length);
-		if (datas.length < 2) {
-			filters.innerHTML = "";
-		}
-	})
+			baliseBtn.dataset.id = element.id;
+			baliseBtn.addEventListener("click", function() {
+				console.log(baliseBtn.dataset.id);
+			});
+		});
+	});
+	
+// buttons.forEach(btn => {
+// 	buttons.addEventListener("click", function() {
+// 		console.log(baliseBtn.dataset.id)
+// 	})
+// })
+
+// let filtersTab = []
+// filtersTab = Array.from(categories);
+// console.log(filtersTab[2]);
+
