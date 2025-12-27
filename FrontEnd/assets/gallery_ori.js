@@ -30,7 +30,9 @@ fetch(`${urlAPI}categories`)
 	.then(categories => {
 		filters.innerHTML = "";
 		if (categories.length < 2) return;
-		categories.unshift({id: 0, name: 'Tous'});
+		filters.innerHTML = `<button class="buttons" type="button" data-id="0">Tous</button>`;
+		const TousBtn = document.querySelector("#filter-button .buttons");
+		TousBtn.addEventListener("click", () => majGallery(0));
 		categories.forEach(element => {
             const baliseBtn = document.createElement("button");
 			baliseBtn.classList.add("buttons");
@@ -41,4 +43,3 @@ fetch(`${urlAPI}categories`)
 			filters.appendChild(baliseBtn);
 		});
 	});
-
